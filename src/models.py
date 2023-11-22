@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 class User(db.Model):
+    __tablename__ = "User"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250), nullable=False, unique=True) #I added this username attribute, so I must migrate & upgrade it
     firstname = db.Column(db.String(250), nullable=False)
@@ -18,5 +19,13 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
+            "username": self.username,
+            "firstname": self.firstname,
+            "lastname": self.lastname
             # do not serialize the password, its a security breach
         }
+    
+class Favorites(db.Model):
+    __tablename__ = "Favorites"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('User.id'), nullable=False)
